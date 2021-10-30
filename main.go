@@ -2,6 +2,10 @@ package main
 
 import (
 	"fmt"
+	"github.com/gocolly/colly"
+	"bufio"
+	"strconv"
+	"os"
 )
 
 func main() {
