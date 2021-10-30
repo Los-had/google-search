@@ -11,6 +11,9 @@ import (
 
 func main() {
 	fmt.Println("Welcome to google search on your terminal!")
+	scanner := bufio.NewScanner(os.Stdin)
+	scanner.Scan()
+	input = scanner.Text()
 }
 
 func GenerateURL(search_term string) string {
