@@ -27,15 +27,23 @@ func main() {
 	url := "www.google.com/search?q=" + GenerateURL(input) + "&ie=UTF-8&oe=UTF-8"
 	url2 := "google.com/search?q=" + GenerateURL(input) + "&ie=UTF-8&oe=UTF-8"
 	i := 0
-	//results := make([]SearchResult, 0)
+	results := make([]SearchResult, 0)
 
 	c := colly.NewCollector(
 		colly.AllowedDomains(url, url2),
 		colly.UserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML like Gecko) Chrome/61.0.3163.100 Safari/537.36"),
 	)
 
-	c.OnHTML(".g div ", func(e *colly.HTMLElement) {
-		//return
+	c.OnHTML("div[class=g]", func(e *colly.HTMLElement) {
+		website_url := e.ChildText("a[href]")
+		website_title := e.ChildText("h3")
+		website_description := e.ChildAttr("div", "VwiC3b yXK7lf MUxGbd yDYNvb lyLwlc lEBKkf")
+		results = append(results, SearchResult{
+			Link: website_url, 
+			Name: website_title,
+			Description: website_description,
+		})
+		
 		i++
 	})
 
@@ -48,6 +56,13 @@ func main() {
 	})
 
 	c.OnScraped(func(r *colly.Response) {
+		for _, j := range results {
+			fmt.Println("==============================================================================")
+			fmt.Println(j.Name)
+			fmt.Println(j.Description)
+			fmt.Println(j.Link)
+			fmt.Println("==============================================================================")
+		}
 		fmt.Println(i, "Results was founded")
 	})
 
